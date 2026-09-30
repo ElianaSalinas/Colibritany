@@ -1,43 +1,103 @@
-# Pokémon AR - Ataque Relámpago
+# Colibritany AR
 
-Experiencia de realidad aumentada hecha en Unity que usa **Vuforia Engine**
-para reconocer dos cartas físicas de Pokémon (Pikachu y Charizard) a través
-de la cámara y disparar una animación de ataque entre ambos modelos 3D.
+Proyecto de realidad aumentada en **Unity 6** con **Vuforia Engine**. La cámara
+reconoce imágenes impresas (Image Targets) y muestra contenido 3D o video encima
+de ellas en tiempo real.
 
-## 🎮 Cómo funciona
+El proyecto tiene dos experiencias:
 
-1. La cámara reconoce cada carta como una imagen de referencia (Image Target).
-2. Sobre cada carta aparece su modelo 3D correspondiente, con su animación
-   idle.
-3. Al acercar las cartas entre sí, un Collider detecta el "choque":
-   - Pikachu reproduce su animación de salto/baile.
-   - Se dispara un rayo (Lightning Bolt) desde Pikachu hacia Charizard.
+1. **Video AR de Colibritany**: al apuntar la cámara a la imagen de referencia,
+   aparece sobre ella un plano que reproduce el video *"Colibritany – Mi Sexy
+   Chambelán"*.
+2. **Pikachu vs. Charizard (Ataque Relámpago)**: dos cartas de Pokémon se
+   reconocen por separado, cada una muestra su modelo 3D animado y, al
+   acercarlas, Pikachu salta y lanza un rayo contra Charizard.
+
+---
+
+## ✨ Cómo funciona
+
+### Video AR
+- `ARCamera` (Vuforia) usa la webcam para buscar el Image Target.
+- Cuando lo detecta, se activa un `Plane` hijo del target con un **Video Player**
+  que reproduce el clip sobre la imagen.
+
+### Pikachu vs. Charizard
+1. Cada carta (`Assets/ImageTargets/pikachu.jpeg` y `charizard.jpeg`) es un
+   Image Target con su modelo 3D y su animación.
+2. Al juntar las cartas, los colliders detectan el contacto:
+   - `OnTriggerInteraction` activa la animación de salto/baile de Pikachu
+     (parámetro `IsInteracting` del Animator).
+   - `RayoPikachu` dispara un rayo desde Pikachu hacia Charizard durante un
+     tiempo configurable, con enfriamiento entre ataques.
+
+---
 
 ## 🛠️ Tecnologías
 
-- **Unity 6** (6000.6.0f1)
-- **Vuforia Engine** — reconocimiento de imágenes vía webcam, sin necesidad
-  de build a dispositivo móvil
-- **Digital Ruby's Lightning Bolt Effect** — efecto visual del rayo
-- C# / MonoBehaviour para la lógica de interacción
+| Herramienta | Uso |
+|---|---|
+| Unity **6000.6.0f1** | Motor del proyecto |
+| Vuforia Engine **11.4.4** | Reconocimiento de imágenes (incluido en `Packages/`) |
+| Lightning Bolt Effect (Digital Ruby) | Efecto visual del rayo |
+| C# | Lógica de interacción |
 
-## ▶️ Cómo probarlo
+---
 
-1. Abrir el proyecto en Unity.
-2. Entrar en modo Play (usa la webcam).
-3. Mostrar las cartas impresas de Pikachu y Charizard frente a la cámara.
-4. Acercar ambas cartas para activar la animación y el ataque.
+## ▶️ Cómo ejecutarlo
 
-## 📂 Estructura relevante
+1. **Instala Git LFS** antes de clonar (los modelos, imágenes y el video se
+   guardan con LFS):
+   ```bash
+   git lfs install
+   git clone https://github.com/ElianaSalinas/Colibritany.git
+   ```
+2. Abre la carpeta del proyecto en **Unity Hub** con la versión 6000.6.0f1
+   (o una 6.x compatible).
+3. Abre `Assets/Scenes/SampleScene.unity`.
+4. Pulsa **Play**. Vuforia usa la webcam del computador, no hace falta
+   compilar para móvil.
+5. Muestra la imagen de referencia frente a la cámara (o las cartas de
+   Pikachu y Charizard, según la escena que estés usando).
 
-- `Assets/OnTriggerInteraction.cs` — controla la animación de Pikachu al
-  detectar contacto.
-- `Assets/Scripting/RayoPikachu.cs` — controla el disparo del rayo hacia
-  Charizard.
-- `Assets/Scenes/SampleScene.unity` — escena principal con los Image
-  Targets configurados.
+> Si Vuforia pide una *License Key*, crea una gratis en el
+> [Vuforia Developer Portal](https://developer.vuforia.com/) y pégala en
+> `Assets/Resources/VuforiaConfiguration.asset`.
+
+---
+
+## 📂 Estructura
+
+```
+Assets/
+├── Scenes/SampleScene.unity      # Escena principal (ARCamera + Image Target + video)
+├── Resources/                    # Video de Colibritany, imagen de referencia, config de Vuforia
+├── ImageTargets/                 # Cartas de Pikachu y Charizard
+├── Models/                       # Modelos .glb y Animators de Pikachu y Charizard
+├── LightningBolt/                # Asset del efecto de rayo
+├── OnTriggerInteraction.cs       # Animación de Pikachu al detectar contacto
+└── Scripting/RayoPikachu.cs      # Disparo del rayo hacia Charizard
+Packages/
+└── com.ptc.vuforia.engine-11.4.4.tgz
+```
+
+---
+
+## ⚙️ Configurar el ataque de Pikachu
+
+En el Inspector, dentro del componente **RayoPikachu**:
+
+| Campo | Descripción |
+|---|---|
+| `Rayo` | Objeto con `LightningBoltScript` |
+| `Origen Rayo` | Punto desde donde sale el rayo (ej. cabeza de Pikachu) |
+| `Charizard` | Modelo de Charizard con Collider |
+| `Punto Impacto` | *(Opcional)* punto donde impacta el rayo |
+| `Retraso` / `Duración` / `Intervalo` / `Enfriamiento` | Tiempos del ataque |
+
+---
 
 ## 📝 Notas
 
-Proyecto educativo/de práctica para explorar AR con reconocimiento de
-imágenes en Unity sin depender de un build móvil.
+Proyecto educativo para practicar realidad aumentada con reconocimiento de
+imágenes en Unity, sin depender de un build móvil.

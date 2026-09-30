@@ -6,9 +6,9 @@ de ellas en tiempo real.
 
 El proyecto tiene dos experiencias:
 
-1. **Video AR de Colibritany**: al apuntar la cámara a la imagen de referencia,
-   aparece sobre ella un plano que reproduce el video *"Colibritany – Mi Sexy
-   Chambelán"*.
+1. **Video AR de Colibritany**: al apuntar la cámara a la portada del video
+   *"Colibritany – Mi Sexy Chambelán"*, la portada cobra vida y el video se
+   reproduce encima de ella.
 2. **Pikachu vs. Charizard (Ataque Relámpago)**: dos cartas de Pokémon se
    reconocen por separado, cada una muestra su modelo 3D animado y, al
    acercarlas, Pikachu salta y lanza un rayo contra Charizard.
@@ -18,9 +18,11 @@ El proyecto tiene dos experiencias:
 ## ✨ Cómo funciona
 
 ### Video AR
-- `ARCamera` (Vuforia) usa la webcam para buscar el Image Target.
-- Cuando lo detecta, se activa un `Plane` hijo del target con un **Video Player**
-  que reproduce el clip sobre la imagen.
+- La portada del video (`Assets/Resources/descarga.png`) está configurada como
+  Image Target.
+- `ARCamera` (Vuforia) usa la webcam para buscarla.
+- Cuando la detecta, se activa un `Plane` hijo del target con un **Video Player**
+  que reproduce el video justo encima de la portada.
 
 ### Pikachu vs. Charizard
 1. Cada carta (`Assets/ImageTargets/pikachu.jpeg` y `charizard.jpeg`) es un
@@ -57,7 +59,7 @@ El proyecto tiene dos experiencias:
 3. Abre `Assets/Scenes/SampleScene.unity`.
 4. Pulsa **Play**. Vuforia usa la webcam del computador, no hace falta
    compilar para móvil.
-5. Muestra la imagen de referencia frente a la cámara (o las cartas de
+5. Muestra la portada del video de Colibritany frente a la cámara (o las cartas de
    Pikachu y Charizard, según la escena que estés usando).
 
 > Si Vuforia pide una *License Key*, crea una gratis en el
@@ -71,7 +73,7 @@ El proyecto tiene dos experiencias:
 ```
 Assets/
 ├── Scenes/SampleScene.unity      # Escena principal (ARCamera + Image Target + video)
-├── Resources/                    # Video de Colibritany, imagen de referencia, config de Vuforia
+├── Resources/                    # Video de Colibritany, su portada (target) y config de Vuforia
 ├── ImageTargets/                 # Cartas de Pikachu y Charizard
 ├── Models/                       # Modelos .glb y Animators de Pikachu y Charizard
 ├── LightningBolt/                # Asset del efecto de rayo
